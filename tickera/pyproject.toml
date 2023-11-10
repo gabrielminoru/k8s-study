@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "tickera"
+version = "0.1.0"
+description = ""
+authors = ["Gabriel Minoru <gabrielikenaga@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.104.1"
+
+
+[tool.poetry.group.dev.dependencies]
+taskipy = "^1.12.0"
+ruff = "^0.1.5"
+pytest = "^7.4.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.tasks]
+format = "ruff . "
+run = "uvicorn workbench.app:app --reload"
+pre_test = "task lint"
+test = "pytest -s -x --cov=workbench -vv"
+post_test = "coverage html"
