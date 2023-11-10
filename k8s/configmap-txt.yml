@@ -1,0 +1,7 @@
+apiVersion: v1 
+kind: ConfigMap
+metadata:
+  name: configmap-txt
+data:
+  text: "lorem ipsum dolor sit amet"
+

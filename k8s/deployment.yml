@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "hello-app"
+  labels:
+    app: "hello-app"
+
+spec:
+  selector:
+    matchLabels:
+      app: "hello-app"
+  template:
+    metadata:
+      labels:
+        app: "hello-app"
+    spec:
+      containers:
+        - name: "hello-app"
+          image: "gabrielminoru/hello-app:healthz-rl"
+
+          resources:
+            requests:
+              memory: 20Mi
+              cpu: 100m
+
+            limits:
+              memory: 40Mi
+              cpu: 200m
+
+          startupProbe:
+            periodSeconds: 3
+            failureThreshold: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet: 
+              path: /healthz
+              port: 8080
+
+          readinessProbe:
+            periodSeconds: 3
+            failureThreshold: 1
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet: 
+              path: /healthz
+              port: 8080
+
+          livenessProbe:
+            periodSeconds: 5
+            failureThreshold: 2
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet: 
+              path: /healthz
+              port: 8080
+
+          envFrom:
+            - configMapRef:
+                name: hello-app-env
+            - secretRef:
+                name: hello-app-secret
+
+          volumeMounts:
+            - mountPath: "/data"
+              name: config
+              readOnly: true
+
+            - mountPath: "/pvc"
+              name: hello-app-pvc
+      volumes:
+        - name: hello-app-pvc
+          persistentVolumeClaim:
+            claimName: hello-app-pvc
+        - name: config
+          configMap:
+            name: configmap-txt
+            items:
+            - key: text
+              path: "text.txt"
