@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: "hello-app"
-          image: "gabrielminoru/hello-app:healthz-rl"
+          image: "gabrielminoru/hello-app:latest"
 
           resources:
             requests:
