@@ -16,6 +16,15 @@ sudo mv ./kind /usr/local/bin/kind
 
 ref: https://kind.sigs.k8s.io/docs/user/quick-start
 
+# Docker image setup
+The docker image to be deployed needs to respond with 200 to a request on `/healthz` at the port 8080 (or change it at `k8s/current/deployment.yml`).
+The folder contains an example app `hello-app/`. To use it:
+```bash
+cd hello-app
+docker build -t <repo>/hello-app .
+docker push <repo>/hello-app
+```
+Remember to update `k8s/current/deployment.yml` with the correct docker image (mine is there as an example and may not work).
 
 # Cluster setup
 1. Create cluster
