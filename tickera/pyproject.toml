@@ -7,7 +7,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.104.1"
+magentic = "^0.9.1"
+pydantic = "^2.4.2"
+uuid = "^1.30"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -21,7 +23,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.taskipy.tasks]
 format = "ruff . "
-run = "uvicorn workbench.app:app --reload"
+run = "python main.py"
 pre_test = "task lint"
 test = "pytest -s -x --cov=workbench -vv"
 post_test = "coverage html"
