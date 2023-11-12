@@ -10,6 +10,8 @@ import random
 def create_location(theme: str ) -> Location:
     ...
 
+
+
 class WesTick(BaseModel):
     difficulty: float
     db: Path
@@ -19,10 +21,10 @@ class WesTick(BaseModel):
     locations: list[Location] = [create_location(theme = "random")]
 
     def add_player(self, player: Player):
-        if not player.location:
+        if player.location:
             self.players.append(player)
             return
-        random_location = random.choice(self.locations)
+        random_location = random.choice(self.locations) 
         player.set_location(random_location)
         self.players.append(player)
 
@@ -48,7 +50,7 @@ class WesTick(BaseModel):
     def run(self) -> None:
         
         while self.at_least_one_alive():
-            self.get_player("minoru").update("health", "-5")
+            self.get_player("minoru").update("health", -5)
             print(self.get_player("minoru"))
 
 

@@ -1,6 +1,6 @@
 from pydantic import BaseModel, validator
 from .stats import Stats, Stat
-from .location import Location
+from .location import Location, Object
 from typing import Literal
 
 class Player(BaseModel):
@@ -9,6 +9,7 @@ class Player(BaseModel):
     lore: str
     location: dict[str, str] | None = None
     health: float = 100
+    inventory: list[Object]
 
     @validator("stats")
     @classmethod
@@ -19,9 +20,17 @@ class Player(BaseModel):
         name = f"---\nName: {self.name} | Health: {self.health}\n"
 
         stats = f"---\nStats\n{str(self.stats)}---\n"
+        inventory = f'Inventory: {"".join([str(i) for i in (self.inventory)])} \n'
         location = f"Location: {self.location}\n---"
 
-        return name + stats + location
+
+        return name + stats + inventory + location
+    
+    def as_dict(self):
+        self.stats = self.stats.model_dump()
+        dump = self.model_dump()
+        self.stats = self.validate_stats(self.stats)
+        return dump
     
     def set_location(self, location: Location) -> None:
         self.location = location.model_dump()
